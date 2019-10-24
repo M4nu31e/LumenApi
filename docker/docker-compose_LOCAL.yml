@@ -1,0 +1,70 @@
+version: "2.1"
+
+services:
+  service-isac-api-web:
+    image: registry.muc.internetx.com/docker/ix-nginx-isac:latest
+    ports:
+      - "20740:80"
+      - "20741:443"
+    volumes:
+      - ../:/var/www/html
+      #php-fpm socket mapping
+      - fpmvol:/var/run/php-fpm/
+    depends_on:
+      - service-isac-api-php
+    networks:
+      service-isac-api-bridge:
+        aliases:
+          - service-isac-api.local
+  service-isac-api-php:
+    image: registry.muc.internetx.com/docker/ix-php-isac:latest
+    ports:
+      - "20742:9000"
+    volumes:
+      - ../:/var/www/html
+      #php-fpm socket mapping
+      - fpmvol:/var/run/php-fpm/
+    depends_on:
+      service-isac-api-mysql:
+        condition: service_healthy
+
+    environment:
+      PHP_XDEBUG_DEFAULT_ENABLE: 1
+      PHP_XDEBUG_REMOTE_ENABLE: 1
+      PHP_XDEBUG_REMOTE_AUTOSTART: 1
+      PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
+      PHP_XDEBUG_PROFILER_ENABLE: 0
+      PHP_XDEBUG_LOG: "/var/www/html/storage/logs/xdebug.log"
+
+      PHPSTORM_IP: docker.for.mac.localhost
+      PHPSTORM_XDEBUG_PORT: 9000
+      PHPSTORM_IDE_KEY: "FRAUDPROTECTIONSERVICE"
+    networks:
+      service-isac-api-bridge:
+        aliases:
+          - service-isac-api.local
+  service-isac-api-mysql:
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --execute \"use zzzzzwait;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    ports:
+      - "20743:3306"
+    environment:
+      - MYSQL_USER=isacapi
+      - MYSQL_PASSWORD=isacapi
+      - MYSQL_DATABASE=isacapi
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    networks:
+      service-isac-api-bridge:
+        aliases:
+          - service-isac-api.local
+networks:
+  service-isac-api-bridge:
+volumes:
+  fpmvol:
