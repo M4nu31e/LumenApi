@@ -1,0 +1,5 @@
+dependencies:
+  # always require service-helpers which contains helper functions for helm used in IX helm templates
+  - name: common 
+    repository: "@chartmuseum.customer-virt.eu"
+    version: 0.0.6

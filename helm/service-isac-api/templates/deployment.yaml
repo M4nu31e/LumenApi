@@ -1,0 +1,90 @@
+{{- template "common.deployment" (list . "mychart.deployment") -}}
+{{- define "mychart.deployment" -}}
+## Define overrides for your Deployment resource here
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        releaseTime: "{{ date "20060102150405" .Release.Time }}"
+    spec:
+      containers:
+      - {{ template "common.container" (list . "mychart.deployment.nginx") }}
+      - {{ template "common.container" (list . "mychart.deployment.php") }}
+      - {{ template "common.container" (list . "mychart.deployment.fluentbit") }}
+      volumes:
+      - name: varlog
+        emptyDir: {}
+      - name: fluentbit-config
+        configMap:
+          name: {{ template "common.name" . }}-fluentbit-config 
+          defaultMode: 420
+{{- end -}}
+{{- define "mychart.deployment.nginx" -}}
+## Define overrides for your Container here
+name: nginx
+image: "{{ .Values.nginx.repository }}:{{ .Values.nginx.tag }}"
+livenessProbe:
+  httpGet:
+    path: /healthz 
+    port: 80
+readinessProbe:
+  httpGet:
+    path: /healthz 
+    port: 80
+resources:
+  limits:
+    cpu: {{ .Values.nginx.resources.limits.cpu }} 
+    memory: {{ .Values.nginx.resources.limits.memory }} 
+  requests:
+    cpu: {{ .Values.nginx.resources.requests.cpu }} 
+    memory: {{ .Values.nginx.resources.requests.memory }}
+volumeMounts:
+- name: varlog
+  mountPath: /var/log/nginx
+{{- end -}}
+{{- define "mychart.deployment.php" -}}
+## Define overrides for your Container here
+name: fpm
+image: "{{ .Values.fpm.repository }}:{{ .Values.fpm.tag }}"
+livenessProbe:
+  tcpSocket:
+    port: 9000 
+readinessProbe:
+  tcpSocket:
+    port: 9000
+resources:
+  limits:
+    cpu: {{ .Values.fpm.resources.limits.cpu }}
+    memory: {{ .Values.fpm.resources.limits.memory }}
+  requests:
+    cpu: {{ .Values.fpm.resources.requests.cpu }}
+    memory: {{ .Values.fpm.resources.requests.memory }}
+volumeMounts:
+- name: varlog
+  mountPath: /var/www/html/storage/logs
+{{- end -}}
+{{- define "mychart.deployment.fluentbit" -}}
+## Define overrides for your Container here
+name: fluentbit 
+image: "{{ .Values.fluentbit.repository }}:{{ .Values.fluentbit.tag }}"
+resources:
+  limits:
+    cpu: {{ .Values.fluentbit.resources.limits.cpu }}
+    memory: {{ .Values.fluentbit.resources.limits.memory }}
+  requests:
+    cpu: {{ .Values.fluentbit.resources.requests.cpu }}
+    memory: {{ .Values.fluentbit.resources.requests.memory }}
+volumeMounts:
+- name: varlog
+  mountPath: /var/log
+- name: fluentbit-config
+  mountPath: /fluent-bit/etc/fluent-bit.conf
+  subPath: fluent-bit.conf
+- name: fluentbit-config
+  mountPath: /fluent-bit/etc/parsers_custom.conf
+  subPath: parsers.conf 
+{{- end -}}

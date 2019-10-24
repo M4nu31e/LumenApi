@@ -1,0 +1,2 @@
+# Base Image 
+FROM registry.muc.internetx.com/docker/ix-nginx-isac:latest

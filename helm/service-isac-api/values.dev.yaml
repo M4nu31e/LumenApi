@@ -1,0 +1,35 @@
+### Overwrite values for DEV environment 
+## minimal needed variables for chart
+global:
+  environment: dev
+
+# applied to all images
+image:
+  pullPolicy: Always 
+  pullSecrets:
+    - dockerhub.customer-virt.eu
+  hostAliases: {}
+
+# custom nginx container settings
+nginx:
+  repository: dockerhub.customer-virt.eu:5001/ix-services/service-isac-api-nginx
+  tag: latest 
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# custom fpm container settings
+fpm:
+  repository: dockerhub.customer-virt.eu:5001/ix-services/service-isac-api-fpm
+  tag: latest 
+  resources:
+    limits:
+      cpu: 800m
+      memory: 512Mi 
+    requests:
+      cpu: 200m
+      memory: 256Mi

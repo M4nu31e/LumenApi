@@ -1,0 +1,21 @@
+# Base Image 
+FROM registry.muc.internetx.com/docker/ix-nginx-isac:feature-k8s
+
+# Clone git
+ADD . /var/www/html
+RUN cp -R /var/www/html/.Build/vendor /var/www/html/vendor \
+    && mkdir -p /var/run/php-fpm \
+    && touch /var/www/html/storage/logs/laravel.log \
+    && cp /var/www/html/.env.live /var/www/html/.env \
+    && chown -R 1337:1337 /var/www/html/ \
+    && find /var/www/html -type d -exec chmod 775 {} + \
+    && find /var/www/html/.Build -name "*.*" -type f -delete \
+    && rm -rf /var/www/html/.Build \
+    && find /var/www/html/.git -name "*.*" -type f -delete \
+    && rm -rf /var/www/html/.git \
+    && rm -rf /var/www/html/.gitattributes \
+    && rm -rf /var/www/html/.gitignore \
+    && rm -rf /var/www/html/.gitlab-ci.yml
+
+# Workdir
+WORKDIR /var/www/html

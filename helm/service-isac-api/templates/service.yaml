@@ -1,0 +1,13 @@
+{{- template "common.service" (list . "mychart.web.service") -}}
+{{- define "mychart.web.service" -}}
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: {{ .Values.service.targetPorts.http }}
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: {{ .Values.service.targetPorts.https }}
+{{- end -}}

@@ -1,0 +1,72 @@
+### ISAC UI configuration
+## minimal needed variables for chart
+global:
+  environment: dev
+deploymentStrategy: RollingUpdate
+replicaCount: 1
+resources: {}
+revisionHistoryLimit: 5
+
+# applied to all images
+image:
+  pullPolicy: IfNotPresent
+  pullSecrets: {}
+
+# custom nginx container settings
+nginx:
+  repository: registry.muc.internetx.com/ix-services/service-isac-api-nginx
+  tag: latest 
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# custom fpm container settings
+fpm:
+  repository: registry.muc.internetx.com/ix-services/service-isac-api-fpm
+  tag: latest 
+  resources:
+    limits:
+      cpu: 800m
+      memory: 512Mi 
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+# custom fluentd container settings
+fluentbit:
+  repository: fluent/fluent-bit
+  tag: 1.2.1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
+
+# service settings
+service:
+  type: ClusterIP
+  targetPorts:
+    http: 80 
+    https: 443
+
+# ingress settings
+ingress:
+  hosts:
+  - host: service-isac-api.services-dev.intern.internetx.io
+    backend:
+      port: 443
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+  tls:
+    - secretName: tls-wildcard.services-dev.intern.internetx.io
+      hosts:
+      - service-isac-api.services-dev.intern.internetx.io

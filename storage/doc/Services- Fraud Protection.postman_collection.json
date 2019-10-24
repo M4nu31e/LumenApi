@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Services: Fraud Protection",
+		"_postman_id": "587e8e22-4337-66f1-de16-3fa3aaeeb7eb",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:20340/fraudprotection/check",
+			"request": {
+				"url": "localhost:20340/fraudprotection/check",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"account\" : {\n\t\t\"first_name\" : \"hoooo\",\n\t\t\"last_name\" : \"youcan\",\n\t\t\"email\" : \"hoooo@youcan.de\",\n\t\t\"organization\" : \"Youcan GmbH\",\n\t\t\"iban\": \"\",\n\t\t\"created\" : \"2019-10-15 00:20:03\"\n\t},\n\t\"order\" : {\n\t\t\"created\" : \"\"\n\t},\n\t\"client_ip\" : \"123.123.123.123\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

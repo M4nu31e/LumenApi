@@ -1,0 +1,54 @@
+{{- template "common.configmap" (list . "mychart.configmap") -}}
+{{- define "mychart.configmap" -}}
+metadata:
+  name: {{ template "common.name" . }}-fluentbit-config
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers_custom.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    [INPUT]
+        Name             tail
+        Path             /var/log/lumen.log
+        Parser           ixlaravel 
+        Tag              ix-services.service-isac-api.laravel
+        Refresh_Interval 5
+        Mem_Buf_Limit    5MB
+        Skip_Long_Lines  On
+    [INPUT]
+        Name             tail
+        Path             /var/log/access.log
+        Parser           nginx 
+        Tag              ix-services.service-isac-api.nginx
+        Refresh_Interval 5
+        Mem_Buf_Limit    5MB
+        Skip_Long_Lines  On
+    [OUTPUT]
+        Name          forward
+        Match         * 
+        Host          ix-services-fluentd-{{ .Values.global.environment}}.ix-services-infrastructure-{{ .Values.global.environment}}
+        Port          24224
+        Retry_Limit   False
+    [OUTPUT]
+        Name  stdout
+        Match * 
+
+  parsers.conf: |
+    [PARSER]
+        Name   nginx
+        Format regex
+        Regex ^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+    [PARSER]
+        Name   ixlaravel
+        Format regex
+        Regex ^\[(?<time>[^\]]*)\]\[(?<logid>[^\]]*)\]\[(?<file>[^\]]*)\]\[(?<line>[^\]]*)\]\[(?<method>[^\]]*)\]\[(?<env>[^\]]*)\]\[(?<loglevel>[^\]]*)\]: (?<message>.*)$
+        Time_Key time
+        Time_Format %Y-%m-%d %H:%M:%S %z
+{{- end -}}

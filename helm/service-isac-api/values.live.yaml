@@ -1,0 +1,52 @@
+### Overwrite values for LIVE environment 
+## minimal needed variables for chart
+global:
+  environment: live 
+replicaCount: 2 
+
+# applied to all images
+image:
+  pullPolicy: IfNotPresent 
+  pullSecrets:
+    - dockerhub.customer-virt.eu
+  hostAliases: {}
+
+# custom nginx container settings
+nginx:
+  repository: dockerhub.customer-virt.eu:5001/ix-services/service-isac-api-nginx
+  tag: live 
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# custom fpm container settings
+fpm:
+  repository: dockerhub.customer-virt.eu:5001/ix-services/service-isac-api-fpm
+  tag: live 
+  resources:
+    limits:
+      cpu: 800m
+      memory: 512Mi 
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+# ingress settings
+ingress:
+  hosts:
+  - host: service-isac-api.services.intern.internetx.io
+    backend:
+      port: 443
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+  tls:
+    - secretName: tls-wildcard.services.intern.internetx.io
+      hosts:
+      - service-isac-api.services.intern.internetx.io

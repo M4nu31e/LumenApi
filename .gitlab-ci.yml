@@ -1,0 +1,314 @@
+variables:
+  # Images
+  CONTAINER_IMAGE_COMPOSER: registry.muc.internetx.com/docker/ix-composer-isac:latest
+  CONTAINER_IMAGE_NODEJS: registry.muc.internetx.com/docker/ix-nodejs-isac:latest
+
+  # DEV k8s
+  PUBLIC_CONTAINER_IMAGE_NGINX_DEV: $PUBLIC_REGISTRY/ix-services/service-isac-api-nginx:latest
+  PUBLIC_CONTAINER_IMAGE_PHP_DEV: $PUBLIC_REGISTRY/ix-services/service-isac-api-fpm:latest
+
+  # STAGE k8s
+  PUBLIC_CONTAINER_IMAGE_NGINX_STAGE: $PUBLIC_REGISTRY/ix-services/service-isac-api-nginx:stage-$CI_COMMIT_SHA
+  PUBLIC_CONTAINER_IMAGE_PHP_STAGE: $PUBLIC_REGISTRY/ix-services/service-isac-api-fpm:stage-$CI_COMMIT_SHA
+
+  # LIVE k8s
+  PUBLIC_CONTAINER_IMAGE_NGINX_LIVE: $PUBLIC_REGISTRY/ix-services/service-isac-api-nginx:live-$CI_COMMIT_SHA
+  PUBLIC_CONTAINER_IMAGE_PHP_LIVE: $PUBLIC_REGISTRY/ix-services/service-isac-api-fpm:live-$CI_COMMIT_SHA
+
+  # k8s
+  PUBLIC_REGISTRY: dockerhub.customer-virt.eu:5001
+  KUBECONFIG: /etc/deploy/config
+  KUBECTL_DEPLOYER_IMAGE: dockerhub.customer-virt.eu:5001/docker/ix-kubectl-deployer:latest
+  K8S_DEV_CONTEXT: kubernetes-admin@k8s-dev.intern.customer-virt.eu
+  K8S_STAGE_CONTEXT: kubernetes-admin@k8s-live.intern.customer-virt.eu
+  K8S_LIVE_CONTEXT: kubernetes-admin@k8s-live.intern.customer-virt.eu
+
+stages:
+  - test
+  - build_resources
+  - build_containers
+  - deploy_k8s
+
+# TEST
+test_sniff_php:
+  stage:
+    test
+  image: $CONTAINER_IMAGE_COMPOSER
+  cache:
+    key: "$CI_PROJECT_ID-$CI_COMMIT_REF_SLUG-composer"
+    paths:
+      - vendor/
+      - cached/
+  before_script:
+    - export COMPOSER_CACHE_DIR=cached
+  script:
+    - composer require "squizlabs/php_codesniffer=*"
+    - npm run check:php
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  except:
+    - master
+    - stage
+    - live
+
+# BUILD
+build_composer:
+  stage:
+    build_resources
+  image: $CONTAINER_IMAGE_COMPOSER
+  cache:
+    key: "$CI_PROJECT_ID-$CI_COMMIT_REF_SLUG-composer"
+    paths:
+      - vendor/
+      - cached/
+  before_script:
+    - export COMPOSER_CACHE_DIR=cached
+    - mkdir .Build || true
+  script:
+    - composer install --no-dev --prefer-dist --optimize-autoloader
+    - cp -R vendor .Build/
+  artifacts:
+    expire_in: 15 minutes
+    paths:
+      - .Build
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - master
+    - stage
+    - live
+
+# DEV
+build_nginx_dev_k8s:
+  extends: .build_containers_dev
+  script:
+    - login_dockerhub
+    - login_registry
+    - docker build -t $PUBLIC_CONTAINER_IMAGE_NGINX_DEV -f docker/nginx/Dockerfile-${DEPLOY_ENVIRONMENT} .
+    - docker push $PUBLIC_CONTAINER_IMAGE_NGINX_DEV
+build_php_dev_k8s:
+  extends: .build_containers_dev
+  script:
+    - login_dockerhub
+    - login_registry
+    - docker build -t $PUBLIC_CONTAINER_IMAGE_PHP_DEV -f docker/php/Dockerfile-${DEPLOY_ENVIRONMENT} .
+    - docker push $PUBLIC_CONTAINER_IMAGE_PHP_DEV
+deploy_dev_k8s:
+  extends: .deploy_k8s_dev
+  script:
+    - set_kubectl_credentials
+    - setup_tiller
+    - cd helm && ./build_helm.sh
+    - helm_install_project
+
+# STAGE
+build_nginx_stage_k8s:
+  extends: .build_containers_stage
+  script:
+    - login_dockerhub
+    - login_registry
+    - docker build -t $PUBLIC_CONTAINER_IMAGE_NGINX_STAGE -f docker/nginx/Dockerfile-${DEPLOY_ENVIRONMENT} .
+    - docker push $PUBLIC_CONTAINER_IMAGE_NGINX_STAGE
+build_php_stage_k8s:
+  extends: .build_containers_stage
+  script:
+    - login_dockerhub
+    - login_registry
+    - docker build -t $PUBLIC_CONTAINER_IMAGE_PHP_STAGE -f docker/php/Dockerfile-${DEPLOY_ENVIRONMENT} .
+    - docker push $PUBLIC_CONTAINER_IMAGE_PHP_STAGE
+deploy_stage_k8s:
+  extends: .deploy_k8s_stage
+  script:
+    - set_kubectl_credentials
+    - setup_tiller
+    - cd helm && ./build_helm.sh
+    - helm_install_project
+
+# LIVE
+build_nginx_live_k8s:
+  extends: .build_containers_live
+  script:
+    - login_dockerhub
+    - login_registry
+    - docker build -t $PUBLIC_CONTAINER_IMAGE_NGINX_LIVE -f docker/nginx/Dockerfile-${DEPLOY_ENVIRONMENT} .
+    - docker push $PUBLIC_CONTAINER_IMAGE_NGINX_LIVE
+build_php_live_k8s:
+  extends: .build_containers_live
+  script:
+    - login_dockerhub
+    - login_registry
+    - docker build -t $PUBLIC_CONTAINER_IMAGE_PHP_LIVE -f docker/php/Dockerfile-${DEPLOY_ENVIRONMENT} .
+    - docker push $PUBLIC_CONTAINER_IMAGE_PHP_LIVE
+deploy_live_k8s:
+  extends: .deploy_k8s_live
+  script:
+    - set_kubectl_credentials
+    - setup_tiller
+    - cd helm && ./build_helm.sh
+    - helm_install_project
+
+
+# ---------------------------------------------------------------------------
+
+# extend dev
+.build_containers_dev:
+  stage:
+    build_containers
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - master
+  environment:
+    dev
+.deploy_k8s_dev:
+  image: $KUBECTL_DEPLOYER_IMAGE
+  stage:
+    deploy_k8s
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - master
+  environment:
+    dev
+
+# extend stage
+.build_containers_stage:
+  stage:
+    build_containers
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - stage
+  environment:
+    stage
+.deploy_k8s_stage:
+  image: $KUBECTL_DEPLOYER_IMAGE
+  stage:
+    deploy_k8s
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - stage
+  environment:
+    stage
+
+# extend live
+.build_containers_live:
+  stage:
+    build_containers
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - live
+  environment:
+    live
+.deploy_k8s_live:
+  image: $KUBECTL_DEPLOYER_IMAGE
+  stage:
+    deploy_k8s
+  tags:
+    - docker
+    - shared_runner
+    - build_docker
+  only:
+    - live
+  environment:
+    live
+
+
+# ---------------------------------------------------------------------------
+
+.ix_devops: &ix_devops |
+  # IX DevOps variables and functions
+  #set -x
+  export TILLER_NAMESPACE=ix-system
+
+  # Only deploy to live / master branch -> live deploy
+  FORCE_LIVE=false
+
+  ## Set Environment
+  # set stage variables
+  if [[ "$CI_COMMIT_REF_NAME" == "stage" ]]; then 
+    echo "set STAGE variables"
+    DEPLOY_ENVIRONMENT=stage
+    IMAGE_TAG=stage-$CI_COMMIT_SHA
+    K8S_CLUSTER=$K8S_STAGE_KUBECONFIG
+    K8S_CONTEXT=$K8S_STAGE_CONTEXT
+  # set live variables
+  elif [[ "$CI_COMMIT_REF_NAME" == "live" ]] || $FORCE_LIVE; then
+    echo "set LIVE variables"
+    DEPLOY_ENVIRONMENT=live
+    IMAGE_TAG=live-$CI_COMMIT_SHA
+    K8S_CLUSTER=$K8S_LIVE_KUBECONFIG
+    K8S_CONTEXT=$K8S_LIVE_CONTEXT
+  # set dev variables
+  elif [[ "$CI_COMMIT_REF_NAME" == "master" ]]; then
+    # set dev variables
+    echo "set DEV variables"
+    DEPLOY_ENVIRONMENT=dev    
+    IMAGE_TAG=latest
+    K8S_CLUSTER=$K8S_DEV_KUBECONFIG
+    K8S_CONTEXT=$K8S_DEV_CONTEXT
+  # abort on undefined branch
+  else 
+    echo "UNDEFINED branch - aborting!"
+    exit 0
+  fi
+
+  # setup tiller
+  function setup_tiller() {
+    echo "Tiller setup ..."
+    helm init --client-only
+    echo ${CHARTMUSEUM_AUTH_CONFIG} | base64 -d >> ~/.helm/repository/repositories.yaml
+    helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com
+    helm plugin install https://github.com/chartmuseum/helm-push
+    helm repo update
+    if ! helm version --debug; then
+      echo "Failed to init Tiller."
+      return 1
+    fi
+    echo "Tiller setup finished"
+  }
+
+  # login gitlab registry
+  function login_registry() {
+    docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  }
+
+  # login dockerhub registry
+  function login_dockerhub() {
+    mkdir -p  ~/.docker
+    echo ${DOCKER_AUTH_CONFIG} > ~/.docker/config.json
+    docker login dockerhub.customer-virt.eu:5001
+  }
+
+  # setup kubectl
+  function set_kubectl_credentials() {
+    mkdir -p /etc/deploy
+    echo ${K8S_CLUSTER} | base64 -d > ${KUBECONFIG}
+    kubectl config use-context ${K8S_CONTEXT} 
+  }
+
+  # install project
+  function helm_install_project() {
+    helm upgrade --install --namespace ix-services-${DEPLOY_ENVIRONMENT} service-isac-api-${DEPLOY_ENVIRONMENT} chartmuseum.customer-virt.eu/service-isac-api --values service-isac-api/values.${DEPLOY_ENVIRONMENT}.yaml --set nginx.tag=${IMAGE_TAG} --set fpm.tag=${IMAGE_TAG}
+  }
+
+
+# only run when not overwritten from jobs
+before_script:
+  - *ix_devops
