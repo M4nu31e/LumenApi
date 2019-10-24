@@ -16,28 +16,27 @@ class ApiAccountController extends IsacApiController
      * Check account against fraudulent behavior
      *
      * @param ApiAccountService $accountService
-     * @return Response|ResponseFactory
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
     public function checkAccount(
         ApiAccountService $accountService
-    )
-    {
-        $results = $accountService->checkAccount();
+    ) {
+
+        $results = $accountService->createAccount();
         if ($results) {
             return $this->returnStatus(
                 200,
                 [
-                    'msg' => 'Successfully checked account fraud status',
-                    'type' => 'check',
+                    'msg' => 'Successfully created account',
+                    'type' => 'account',
                     'data' => $results,
                 ]
             );
         } else {
             return $this->returnStatus(
                 400,
-                ['msg' => 'Could check account fraud status']
+                ['msg' => 'Could create account!']
             );
         }
     }
-
 }

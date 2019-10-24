@@ -8,11 +8,10 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class ApiAccountService extends IsacApiService
 {
-
-
-
 
     public function createAccount()
     {
@@ -34,14 +33,11 @@ class ApiAccountService extends IsacApiService
             $client_ip = $input['client_ip'];
         }
 
+        /*        try {
 
-
-        try {
-
-        } catch (\Exception $exception) {
-            Log::error($exception->getMessage());
-            return false;
-        }
+                } catch (\Exception $exception) {
+                    Log::error($exception->getMessage());
+                    return false;
+                }*/
     }
-
 }

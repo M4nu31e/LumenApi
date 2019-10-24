@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\ApiAccountController;
+use App\Services\ApiAccountService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use App\Services\IsacApiService;
 
 class IsacApiServiceProvider extends ServiceProvider
 {
@@ -27,10 +26,8 @@ class IsacApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ApiAccountController::class, function ($app) {
-            return new ApiAccountController($this->request);
+        $this->app->bind(ApiAccountService::class, function ($app) {
+            return new ApiAccountService($this->request);
         });
-
-
     }
 }

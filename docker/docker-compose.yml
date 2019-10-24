@@ -4,8 +4,8 @@ services:
   service-isac-api-web:
     image: registry.muc.internetx.com/docker/ix-nginx-isac:latest
     ports:
-      - "20340:80"
-      - "20341:443"
+      - "20740:80"
+      - "20741:443"
     volumes:
       - ../:/var/www/html
       #php-fpm socket mapping
@@ -19,7 +19,7 @@ services:
   service-isac-api-php:
     image: registry.muc.internetx.com/docker/ix-php-isac:latest
     ports:
-      - "20342:9000"
+      - "20742:9000"
     volumes:
       - ../:/var/www/html
       #php-fpm socket mapping
@@ -53,7 +53,7 @@ services:
       context: .
       dockerfile: database/Dockerfile
     ports:
-      - "20343:3306"
+      - "20743:3306"
     environment:
       - MYSQL_USER=isacapi
       - MYSQL_PASSWORD=isacapi

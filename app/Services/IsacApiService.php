@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 abstract class IsacApiService
-
 {
     public $customer_uid;
     protected $request;
@@ -21,8 +19,7 @@ abstract class IsacApiService
      */
     public function __construct(
         Request $request
-    )
-    {
+    ) {
         $this->request = $request;
 
         $this->customer_context = null;
@@ -53,7 +50,6 @@ abstract class IsacApiService
                 Log::error('Error decoding user data');
             }
         }
-
     }
 
     private function getHttpHeaderValue($value)
