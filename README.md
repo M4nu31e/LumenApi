@@ -1,6 +1,6 @@
-# Fraud Protection Service
+# Isac Api Service
 
-REST-Service to check accounts against fraudulent behavior 
+REST-Service to interact with ISAC
 
 ## Setup
 ```bash
