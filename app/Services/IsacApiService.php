@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\Services\Checks\fraudCheck;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-//ToDo abstract
-class IsacApiService
+abstract class IsacApiService
 
 {
     public $customer_uid;
@@ -55,36 +54,6 @@ class IsacApiService
             }
         }
 
-    }
-
-    public function checkAccount()
-    {
-
-        Log::info("starting fraud check: " . json_encode($this->request->all()));
-
-        $input = $this->request->all();
-
-        $account = null;
-        $order = null;
-        $client_ip = null;
-        if (!empty($input['account'])) {
-            $account = $input['account'];
-        }
-        if (!empty($input['order'])) {
-            $order = $input['order'];
-        }
-        if (!empty($input['order'])) {
-            $client_ip = $input['client_ip'];
-        }
-
-        $fraudChecks = new fraudCheck();
-
-        try {
-            return $fraudChecks->checkAccount($account, $order, $client_ip);
-        } catch (\Exception $exception) {
-            Log::error($exception->getMessage());
-            return false;
-        }
     }
 
     private function getHttpHeaderValue($value)

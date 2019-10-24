@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\ApiAccountController;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use App\Services\IsacApiService;
 
-class FraudProtectionServiceProvider extends ServiceProvider
+class IsacApiServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -26,8 +27,10 @@ class FraudProtectionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(IsacApiService::class, function ($app) {
-            return new IsacApiService($this->request);
+        $this->app->bind(ApiAccountController::class, function ($app) {
+            return new ApiAccountController($this->request);
         });
+
+
     }
 }

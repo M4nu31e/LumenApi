@@ -83,7 +83,7 @@ $app->singleton('filesystem', function ($app) {
 |
 */
 
-$app->register(App\Providers\FraudProtectionServiceProvider::class);
+$app->register(App\Providers\IsacApiServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(IxHelper\IxHelperServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);

@@ -11,18 +11,16 @@
 |
 */
 
+$API_VERSION = 'v2';
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
 // Fraud check operations
-$router->group(['prefix' => 'fraudprotection'], function () use ($router) {
+$router->group(['prefix' => 'isac-api/' . $API_VERSION], function () use ($router) {
     // Fraud Protection Service - check account against rules
-    $router->post('/check', 'FraudProtectionController@checkAccount');
+    $router->post('/check', 'IsacApiController@checkAccount');
 
-    // TODO - route to register all accounts with their ip address ( save only account's sha256 )
-    // TODO - route to manually override fraud result
-
-    // TODO - routes to manage rules and negative values / addresses
 });

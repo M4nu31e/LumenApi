@@ -1,24 +1,28 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Manuel.Soellner
+ * Date: 24.10.2019
+ * Time: 14:48
+ */
 
 namespace App\Http\Controllers;
 
-use App\Services\IsacApiService;
-use Illuminate\Http\Response;
-use Laravel\Lumen\Http\ResponseFactory;
+use App\Services\ApiAccountService;
 
-class FraudProtectionController extends Controller
+class ApiAccountController extends IsacApiController
 {
-
     /**
      * Check account against fraudulent behavior
      *
-     * @param IsacApiService $fps
+     * @param ApiAccountService $accountService
      * @return Response|ResponseFactory
      */
     public function checkAccount(
-        IsacApiService $fps
-    ) {
-        $results = $fps->checkAccount();
+        ApiAccountService $accountService
+    )
+    {
+        $results = $accountService->checkAccount();
         if ($results) {
             return $this->returnStatus(
                 200,
@@ -35,20 +39,5 @@ class FraudProtectionController extends Controller
             );
         }
     }
-
-    /**
-     * Register account with it's ip and sha265
-     *
-     * @param IsacApiService $fps
-     * @return Response|ResponseFactory
-     */
-
-    public function registerAccount(
-        IsacApiService $fps
-    ) {
-
-
-    }
-
 
 }
