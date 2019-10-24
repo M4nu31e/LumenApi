@@ -40,5 +40,4 @@ class ApiAccountService extends IsacApiService
                     return false;
                 }*/
     }
-
 }

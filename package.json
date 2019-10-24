@@ -4,9 +4,11 @@
     "check": "yarn run check:php",
     "check:php": "./vendor/bin/phpcs --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php .",
     "check:phpwin": "vendor\\squizlabs\\php_codesniffer\\bin\\phpcs --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php .",
+    "check:phpdocker": "docker exec -it docker_service-isac-api-php_1 ./vendor/bin/phpcs --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php .",
     "fix": "yarn run fix:php",
     "fix:php": "./vendor/bin/phpcbf --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php .",
-    "fix:phpwin": "vendor\\squizlabs\\php_codesniffer\\bin\\phpcbf --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php ."
+    "fix:phpwin": "vendor\\squizlabs\\php_codesniffer\\bin\\phpcbf --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php .",
+    "fix:phpdocker": "docker exec -it docker_service-isac-api-php_1 ./vendor/bin/phpcbf --standard=PSR2 --ignore=bootstrap,docker,public,resources/views,storage,vendor,database/migrations,_ide_helper.php --extensions=php ."
   },
   "devDependencies": {},
   "dependencies": {}

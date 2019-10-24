@@ -20,8 +20,7 @@ class ApiAccountController extends IsacApiController
      */
     public function checkAccount(
         ApiAccountService $accountService
-    )
-    {
+    ) {
 
         $results = $accountService->createAccount();
         if ($results) {
@@ -40,5 +39,4 @@ class ApiAccountController extends IsacApiController
             );
         }
     }
-
 }
