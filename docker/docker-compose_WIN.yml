@@ -24,7 +24,6 @@ services:
       - ../:/var/www/html
       #php-fpm socket mapping
       - fpmvol:/var/run/php-fpm/
-      - ../../laravel-helper:/var/www/html/vendor/ix-intern/laravel-helper
     depends_on:
       service-isac-api-mysql:
         condition: service_healthy
@@ -37,9 +36,9 @@ services:
       PHP_XDEBUG_PROFILER_ENABLE: 0
       PHP_XDEBUG_LOG: "/var/www/html/storage/logs/xdebug.log"
 
-      PHPSTORM_IP: docker.for.mac.localhost
-      PHPSTORM_XDEBUG_PORT: 9020
-      PHPSTORM_IDE_KEY: "FRAUDPROTECTIONSERVICE"
+      PHPSTORM_IP: docker.for.win.localhost
+      PHPSTORM_XDEBUG_PORT: 9000
+      PHPSTORM_IDE_KEY: "ISACAPISERVICE"
     networks:
       service-isac-api-bridge:
         aliases:
@@ -56,9 +55,9 @@ services:
     ports:
       - "20743:3306"
     environment:
-      - MYSQL_USER=fraudprotection
-      - MYSQL_PASSWORD=fraudprotection
-      - MYSQL_DATABASE=ixfraudprotection
+      - MYSQL_USER=isacapi
+      - MYSQL_PASSWORD=isacapi
+      - MYSQL_DATABASE=isacapi
       - MYSQL_ROOT_PASSWORD=
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
     networks:
