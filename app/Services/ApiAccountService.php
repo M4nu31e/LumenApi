@@ -8,36 +8,17 @@
 
 namespace App\Services;
 
+use App\Http\Requests\AccountCreateRequest;
 use Illuminate\Support\Facades\Log;
 
 class ApiAccountService extends IsacApiService
 {
-
-    public function createAccount()
+    public function create(AccountCreateRequest $request)
     {
+        Log::info("creating account: " . json_encode($request->all()));
 
-        Log::info("creating account: " . json_encode($this->request->all()));
+        //TODO - calling backend connection
 
-        $input = $this->request->all();
-
-        $account = null;
-        $order = null;
-        $client_ip = null;
-        if (!empty($input['account'])) {
-            $account = $input['account'];
-        }
-        if (!empty($input['order'])) {
-            $order = $input['order'];
-        }
-        if (!empty($input['order'])) {
-            $client_ip = $input['client_ip'];
-        }
-
-        /*        try {
-
-                } catch (\Exception $exception) {
-                    Log::error($exception->getMessage());
-                    return false;
-                }*/
+        return true;
     }
 }
