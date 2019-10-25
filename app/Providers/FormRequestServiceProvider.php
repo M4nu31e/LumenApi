@@ -7,7 +7,6 @@ use Laravel\Lumen\Http\Redirector;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 
-
 class FormRequestServiceProvider extends ServiceProvider
 {
     /**

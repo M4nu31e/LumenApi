@@ -56,6 +56,4 @@ class Account
             'country' => 'required',
             'users_id' => 'required',*/
     ];
-
-
 }

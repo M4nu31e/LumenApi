@@ -32,7 +32,7 @@
 /**
  * @OA\Server(
  *     description="ISAC API v2 Server",
- *     url="APP_URL"
+ *     url="https://127.0.0.1:20741/isac-api/v2/"
  * )
  * @OA\ExternalDocumentation(
  *         description="Find out more",
