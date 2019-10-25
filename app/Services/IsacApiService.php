@@ -14,7 +14,7 @@ abstract class IsacApiService
     protected $payload;
 
     /**
-     * FraudProtectionService constructor.
+     * IsacApiService constructor.
      * @param Request $request
      */
     public function __construct(

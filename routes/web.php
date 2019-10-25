@@ -21,5 +21,6 @@ $router->get('/', function () use ($router) {
 // Fraud check operations
 $router->group(['prefix' => 'isac-api/' . $API_VERSION], function () use ($router) {
     // Fraud Protection Service - check account against rules
-    $router->post('/check', 'IsacApiController@checkAccount');
+    $ACCOUNT = 'account';
+    $router->post($ACCOUNT.'/create', 'ApiAccountController@create');
 });

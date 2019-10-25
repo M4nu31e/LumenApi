@@ -8,21 +8,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AccountCreateRequest;
 use App\Services\ApiAccountService;
 
 class ApiAccountController extends IsacApiController
 {
+
     /**
-     * Check account against fraudulent behavior
+     * Create isac account
+     *
+     * @OA\Post(
+     *     path="/account/create",
+     *     tags={"account"},
+     *     summary="Create new account",
+     *     operationId="createAccount",
+     *     @OA\Response(
+     *         response=405,
+     *         description="Invalid input"
+     *     ),
+     *     requestBody={"$ref": "#/components/requestBodies/Account"}
+     * )
      *
      * @param ApiAccountService $accountService
+     * @param AccountCreateRequest $request
      * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
-    public function checkAccount(
-        ApiAccountService $accountService
+    public function create(
+        ApiAccountService $accountService,
+        AccountCreateRequest $request
     ) {
 
-        $results = $accountService->createAccount();
+        $results = $accountService->create($request);
         if ($results) {
             return $this->returnStatus(
                 200,
@@ -35,7 +51,7 @@ class ApiAccountController extends IsacApiController
         } else {
             return $this->returnStatus(
                 400,
-                ['msg' => 'Could create account!']
+                ['msg' => 'Could not create account!']
             );
         }
     }

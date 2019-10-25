@@ -1,0 +1,85 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "ISAC API v2",
+        "description": "RESTful API for managing your products in isac cloud",
+        "termsOfService": "https://www.internetx.com/en/legal/terms-and-conditions/",
+        "contact": {
+            "email": "support@internetx.com"
+        },
+        "version": "2.0.0"
+    },
+    "servers": [
+        {
+            "url": "APP_URL",
+            "description": "ISAC API v2 Server"
+        }
+    ],
+    "paths": {
+        "/account/create": {
+            "post": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Create new account",
+                "operationId": "createAccount",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Account"
+                },
+                "responses": {
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Account": {
+                "title": "Account model",
+                "description": "Account model",
+                "properties": {
+                    "salutation": {
+                        "title": "Salutation",
+                        "description": "Salutation",
+                        "type": "string",
+                        "default": "salutation"
+                    },
+                    "firstname": {
+                        "description": "The salutation name",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "requestBodies": {
+            "Account": {
+                "description": "Account object to create a new isac account",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Account"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "account",
+            "description": "Endpoint for creating an account",
+            "externalDocs": {
+                "description": "Find out more",
+                "url": "https://internetx.com"
+            }
+        }
+    ],
+    "externalDocs": {
+        "description": "Find out more",
+        "url": "https://internetx.com"
+    }
+}
