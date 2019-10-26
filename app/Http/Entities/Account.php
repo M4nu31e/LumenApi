@@ -22,6 +22,8 @@ class Account
 {
 
     /**
+     * The salutation
+     *
      * @OA\Property(
      *     default="salutation",
      *     title="Salutation",
@@ -32,12 +34,20 @@ class Account
      */
     public $salutation;
 
+
     /**
-     * The salutation name
+     * The firstname
+     *
+     * @OA\Property(
+     *     default="firstname",
+     *     title="Firstname",
+     *     description="Firstname"
+     * )
+     *
      * @var string
-     * @OA\Property()
      */
     public $firstname;
+
 
 
     /**

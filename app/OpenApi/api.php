@@ -20,7 +20,7 @@
 
 /**
  * @OA\Tag(
- *     name="account",
+ *     name="Account",
  *     description="Endpoint for creating an account",
  *     @OA\ExternalDocumentation(
  *         description="Find out more",

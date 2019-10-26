@@ -19,7 +19,7 @@ class ApiAccountController extends IsacApiController
      *
      * @OA\Post(
      *     path="/account/create",
-     *     tags={"account"},
+     *     tags={"Account"},
      *     summary="Create new account",
      *     operationId="createAccount",
      *     @OA\Response(
@@ -39,6 +39,7 @@ class ApiAccountController extends IsacApiController
     ) {
 
         $results = $accountService->create($request);
+
         if ($results) {
             return $this->returnStatus(
                 200,

@@ -11,7 +11,7 @@
     },
     "servers": [
         {
-            "url": "APP_URL",
+            "url": "https://127.0.0.1:20741/isac-api/v2/",
             "description": "ISAC API v2 Server"
         }
     ],
@@ -19,7 +19,7 @@
         "/account/create": {
             "post": {
                 "tags": [
-                    "account"
+                    "Account"
                 ],
                 "summary": "Create new account",
                 "operationId": "createAccount",
@@ -47,8 +47,10 @@
                         "default": "salutation"
                     },
                     "firstname": {
-                        "description": "The salutation name",
-                        "type": "string"
+                        "title": "Firstname",
+                        "description": "Firstname",
+                        "type": "string",
+                        "default": "firstname"
                     }
                 },
                 "type": "object"
@@ -70,7 +72,7 @@
     },
     "tags": [
         {
-            "name": "account",
+            "name": "Account",
             "description": "Endpoint for creating an account",
             "externalDocs": {
                 "description": "Find out more",
