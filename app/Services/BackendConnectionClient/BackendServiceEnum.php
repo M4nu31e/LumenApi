@@ -599,7 +599,7 @@ abstract class BackendServiceEnum
      */
     const wsOrderCertificateBulk = "wsOrderCertificateBulk";
     /**
-     * Getting all account ips
+     * Getting all ips
      */
     const wsGetAllAccountIPs = "wsGetAllAccountIPs";
     /**
@@ -617,11 +617,9 @@ abstract class BackendServiceEnum
         try {
             $constant = "App\Services\BackendConnectionClient\BackendServiceEnum::$wsType";
             return defined($constant) ? true : false;
-
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
             return false;
         }
     }
-
 }
