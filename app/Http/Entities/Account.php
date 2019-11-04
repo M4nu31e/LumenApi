@@ -58,12 +58,12 @@ class Account
     public static $rules = [
         'salutation' => 'required',
         'firstname' => 'required',
-        /*    'lastname' => 'required',
-            'email' => 'required',
-            'street' => 'required',
-            'city' => 'required',
-            'zipcode' => 'required',
-            'country' => 'required',
-            'users_id' => 'required',*/
+        'lastname' => 'required',
+        'email' => 'required',
+        'street' => 'required',
+        'city' => 'required',
+        'zipcode' => 'required',
+        'country' => 'required',
+        'users_id' => 'required'
     ];
 }

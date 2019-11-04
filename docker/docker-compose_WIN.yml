@@ -9,7 +9,7 @@ services:
     volumes:
       - ../:/var/www/html
       #php-fpm socket mapping
-      - fpmvol:/var/run/php-fpm/
+      - fpmvol5:/var/run/php-fpm/
     depends_on:
       - service-isac-api-php
     networks:
@@ -23,11 +23,7 @@ services:
     volumes:
       - ../:/var/www/html
       #php-fpm socket mapping
-      - fpmvol:/var/run/php-fpm/
-    depends_on:
-      service-isac-api-mysql:
-        condition: service_healthy
-
+      - fpmvol5:/var/run/php-fpm/
     environment:
       PHP_XDEBUG_DEFAULT_ENABLE: 1
       PHP_XDEBUG_REMOTE_ENABLE: 1
@@ -43,28 +39,7 @@ services:
       service-isac-api-bridge:
         aliases:
           - service-isac-api.local
-  service-isac-api-mysql:
-    healthcheck:
-      test: "/usr/bin/mysql --user=root --execute \"use zzzzzwait;\""
-      interval: 2s
-      timeout: 20s
-      retries: 10
-    build:
-      context: .
-      dockerfile: database/Dockerfile
-    ports:
-      - "20743:3306"
-    environment:
-      - MYSQL_USER=isacapi
-      - MYSQL_PASSWORD=isacapi
-      - MYSQL_DATABASE=isacapi
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-    networks:
-      service-isac-api-bridge:
-        aliases:
-          - service-isac-api.local
 networks:
   service-isac-api-bridge:
 volumes:
-  fpmvol:
+  fpmvol5:
