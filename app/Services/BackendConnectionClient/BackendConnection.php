@@ -19,7 +19,7 @@ class BackendConnection extends BackendServiceEnum
     /**
      * BackendConnection constructor.
      */
-    function __construct()
+    public function __construct()
     {
         $this->api_app_key = '99f9d75a-863e-44e0-b96b-f75b16ac89e5';
         $this->api_dev_key = '377f276e-8646-4d0a-bb31-10c75a27608b';
@@ -46,7 +46,7 @@ class BackendConnection extends BackendServiceEnum
         try {
             Log::info("*** Calling: " . $wsType);
 
-            if (! $this->serviceExists($wsType)) {
+            if ( ! $this->serviceExists($wsType)) {
                 Log::error("*** Calling Engine Service not found");
                 return false;
             }
