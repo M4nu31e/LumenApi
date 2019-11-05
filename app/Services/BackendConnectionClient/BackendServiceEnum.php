@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Manuel.Soellner
- * Date: 25.10.2019
- * Time: 17:09
- */
 
 namespace App\Services\BackendConnectionClient;
 
@@ -12,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 
 abstract class BackendServiceEnum
 {
-    // DEFINITION OF BACKEND SERVICES
+
     /**
      * Get status of bm and cloud server
      */

@@ -15,6 +15,7 @@ abstract class IsacApiService
 
     /**
      * IsacApiService constructor.
+     *
      * @param Request $request
      */
     public function __construct(
@@ -31,9 +32,10 @@ abstract class IsacApiService
         $payload = $this->request->json()->all();
         $this->payload = $payload;
 
-        if ($this->payload &&
-            is_array($this->payload) &&
-            array_key_exists('keyword', $this->payload)) {
+        if ($this->payload 
+            && is_array($this->payload) 
+            && array_key_exists('keyword', $this->payload)
+        ) {
             $this->keyword = $this->payload['keyword'];
         }
 

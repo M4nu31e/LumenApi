@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Manuel.Soellner
- * Date: 24.10.2019
- * Time: 15:44
- */
 
 namespace App\Services\BackendConnectionClient;
 
@@ -37,11 +31,10 @@ class BackendConnection extends BackendServiceEnum
         }
 
         $this->url = env('BACKEND_URL');
-
     }
 
     /**
-     * @param $wsType
+     * @param  $wsType
      * @param  $data
      * @param  $timeout
      * @return mixed
@@ -61,7 +54,6 @@ class BackendConnection extends BackendServiceEnum
             $response = $this->sendRequest($data, $timeout);
             Log::info("*** Response: " . json_encode($response));
             return $response;
-
         } catch (\Exception $exception) {
             Log::error("Error calling engine: " . $exception->getMessage());
             return false;
@@ -69,10 +61,10 @@ class BackendConnection extends BackendServiceEnum
     }
 
     /**
-     *
      * Calls the engine
-     * @param $data
-     * @param int $timeout
+     *
+     * @param  $data
+     * @param  int $timeout
      * @return bool|\stdClass
      * @throws
      */
@@ -80,23 +72,26 @@ class BackendConnection extends BackendServiceEnum
     {
 
         try {
-            $client = new Client([
-                // Base URI is used with relative requests
-                'base_uri' => $this->url,
-                'verify' => false,
-                'timeout' => $timeout
-            ]);
+            $client = new Client(
+                [
+                    // Base URI is used with relative requests
+                    'base_uri' => $this->url,
+                    'verify' => false,
+                    'timeout' => $timeout
+                ]
+            );
 
-            $response = $client->request('POST', "/", [
-                'form_params' => $data,
-                'cookies' => $this->cookies,
-            ]);
+            $response = $client->request(
+                'POST', "/", [
+                    'form_params' => $data,
+                    'cookies' => $this->cookies,
+                ]
+            );
 
             $answer = new \stdClass();
             $answer->body = $response->getBody();
             $answer->status = $response->getStatusCode();
             return $answer;
-
         } catch (BadRequestHttpException $exception) {
             Log::error("Error calling engine: " . $exception->getMessage());
             return false;
