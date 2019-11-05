@@ -40,7 +40,7 @@ class BackendConnection extends BackendServiceEnum
      * @return mixed
      * @throws
      */
-    function callBackend($wsType, $data, $timeout = 600)
+    public function callBackend($wsType, $data, $timeout = 600)
     {
 
         try {
@@ -82,7 +82,9 @@ class BackendConnection extends BackendServiceEnum
             );
 
             $response = $client->request(
-                'POST', "/", [
+                'POST',
+                "/",
+                [
                     'form_params' => $data,
                     'cookies' => $this->cookies,
                 ]

@@ -32,14 +32,14 @@ abstract class IsacApiService
         $payload = $this->request->json()->all();
         $this->payload = $payload;
 
-        if ($this->payload 
-            && is_array($this->payload) 
+        if ($this->payload
+            && is_array($this->payload)
             && array_key_exists('keyword', $this->payload)
         ) {
             $this->keyword = $this->payload['keyword'];
         }
 
-        if (!$request->header('X-Domainrobot-Owner-User')) {
+        if ( ! $request->header('X-Domainrobot-Owner-User')) {
             Log::info('Customer header not present');
         } else {
             $sUser = $request->header('X-Domainrobot-Owner-User');
@@ -51,15 +51,6 @@ abstract class IsacApiService
             } else {
                 Log::error('Error decoding user data');
             }
-        }
-    }
-
-    private function getHttpHeaderValue($value)
-    {
-        if (is_array($value)) {
-            return end($value);
-        } else {
-            return $value;
         }
     }
 }
