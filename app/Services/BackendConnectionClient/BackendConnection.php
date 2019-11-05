@@ -46,7 +46,7 @@ class BackendConnection extends BackendServiceEnum
         try {
             Log::info("*** Calling: " . $wsType);
 
-            if ( ! $this->serviceExists($wsType)) {
+            if (!$this->serviceExists($wsType)) {
                 Log::error("*** Calling Engine Service not found");
                 return false;
             }
