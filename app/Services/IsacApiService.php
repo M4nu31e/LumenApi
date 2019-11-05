@@ -39,7 +39,7 @@ abstract class IsacApiService
             $this->keyword = $this->payload['keyword'];
         }
 
-        if ( ! $request->header('X-Domainrobot-Owner-User')) {
+        if (! $request->header('X-Domainrobot-Owner-User')) {
             Log::info('Customer header not present');
         } else {
             $sUser = $request->header('X-Domainrobot-Owner-User');
