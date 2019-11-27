@@ -20,7 +20,7 @@ class ApiAccountService extends IsacApiService
         try {
             Log::info("creating account: " . json_encode($request->all()));
             $backendConnection = new backend();
-            return $backendConnection->callBackend('wsCreateGuestAccount', $request->all());
+            return $backendConnection->callBackend('WS_CREATE_GUEST_ACCOUNT', $request->all());
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
