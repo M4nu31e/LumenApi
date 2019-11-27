@@ -96,7 +96,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         $apiController = new IsacApiController(new Request());
         $jsonResponse = $apiController->returnStatus(
-            422, [
+            422,
+            [
             'msg' => 'Validation Error',
             'data' => $this->formatErrors($validator)
             ]
