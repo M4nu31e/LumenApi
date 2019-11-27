@@ -21,8 +21,8 @@ class BackendConnection extends BackendServiceEnum
      */
     public function __construct()
     {
-        $this->api_app_key = '99f9d75a-863e-44e0-b96b-f75b16ac89e5';
-        $this->api_dev_key = '377f276e-8646-4d0a-bb31-10c75a27608b';
+        $this->api_app_key = '605c46de-a3aa-49a8-ad0b-25ebc46e629b';
+        $this->api_dev_key = 'B0E5E674-63EA-4406-9677-1CDE72CA398E';
 
         //$this->cookies = session('api_cookies');
 
@@ -45,13 +45,26 @@ class BackendConnection extends BackendServiceEnum
 
         try {
             Log::info("*** Calling: " . $wsType);
+            $checkExisting = $this->serviceExists($wsType);
+            $this->wsType = constant($wsType);
 
-            if (!$this->serviceExists($wsType)) {
+            /*$data["wsType"] = $this->wsType;
+            $data["auth_sessionToken"] = $this->api_session_token;
+            $data["auth_devKey"] = $this->api_dev_key;
+            $data["auth_appKey"] = $this->api_app_key;*/
+
+            if ( ! $checkExisting) {
                 Log::error("*** Calling Engine Service not found");
                 return false;
             }
-
-            $response = $this->sendRequest($data, $timeout);
+            $request_data = ([
+                "auth_sessionToken" => $this->api_session_token,
+                "auth_devKey" => $this->api_dev_key,
+                "auth_appKey" => $this->api_app_key,
+                "wsType" => $this->wsType,
+                "data" => json_encode(["data" => $data])
+            ]);
+            $response = $this->sendRequest($request_data, $timeout);
             Log::info("*** Response: " . json_encode($response));
             return $response;
         } catch (\Exception $exception) {
