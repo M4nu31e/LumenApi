@@ -53,7 +53,7 @@ class BackendConnection extends BackendServiceEnum
             $data["auth_devKey"] = $this->api_dev_key;
             $data["auth_appKey"] = $this->api_app_key;*/
 
-            if ( ! $checkExisting) {
+            if (!$checkExisting) {
                 Log::error("*** Calling Engine Service not found");
                 return false;
             }
