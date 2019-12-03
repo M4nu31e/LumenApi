@@ -29,7 +29,7 @@ class ApiAccountController extends IsacApiController
      *     requestBody={"$ref": "#/components/requestBodies/Account"}
      * )
      *
-     * @param  ApiAccountService    $accountService
+     * @param  ApiAccountService $accountService
      * @param  AccountCreateRequest $request
      * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */

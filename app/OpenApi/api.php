@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andreas.schmid
+ * User: manuel.soellner
  * Date: 25.10.19
  * Time: 14:08
  */
@@ -12,7 +12,7 @@
  *     version="2.0.0",
  *     title="ISAC API v2",
  *     termsOfService="https://www.internetx.com/en/legal/terms-and-conditions/",
- *     @OA\Contact(
+ * @OA\Contact(
  *         email="support@internetx.com"
  *     )
  * )
@@ -22,7 +22,7 @@
  * @OA\Tag(
  *     name="Account",
  *     description="Endpoint for creating an account",
- *     @OA\ExternalDocumentation(
+ * @OA\ExternalDocumentation(
  *         description="Find out more",
  *         url="https://internetx.com"
  *     )

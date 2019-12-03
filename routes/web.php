@@ -13,14 +13,36 @@
 
 $API_VERSION = 'v2';
 
-/** @var \Laravel\Lumen\Routing\Router $router */
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+/**
+ * @var \Laravel\Lumen\Routing\Router $router
+ */
+$router->get(
+    '/',
+    function () use ($router) {
+        return $router->app->version();
+    }
+);
 
-// Fraud check operations
-$router->group(['prefix' => 'isac-api/' . $API_VERSION], function () use ($router) {
-    // Fraud Protection Service - check account against rules
-    $ACCOUNT = 'account';
-    $router->post($ACCOUNT.'/create', 'ApiAccountController@create');
-});
+$router->group(
+    ['prefix' => 'isac-api/' . $API_VERSION],
+    function () use ($router) {
+
+        $ACCOUNT = 'account';
+        //login account
+        $router->post($ACCOUNT . '/login', 'ApiLoginAccountController@create');
+
+    }
+);
+
+$router->group(
+    ['prefix' => 'isac-api/' . $API_VERSION],
+    function () use ($router) {
+
+        $ACCOUNT = 'account';
+        //create account
+        $router->post($ACCOUNT . '/create', 'ApiAccountController@create');
+
+    }
+);
+
+

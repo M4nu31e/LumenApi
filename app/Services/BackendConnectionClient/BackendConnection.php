@@ -21,8 +21,8 @@ class BackendConnection extends BackendServiceEnum
      */
     public function __construct()
     {
-        $this->api_app_key = '605c46de-a3aa-49a8-ad0b-25ebc46e629b';
-        $this->api_dev_key = 'B0E5E674-63EA-4406-9677-1CDE72CA398E';
+        $this->api_app_key = '99f9d75a-863e-44e0-b96b-f75b16ac89e5';
+        $this->api_dev_key = '377f276e-8646-4d0a-bb31-10c75a27608b';
 
         //$this->cookies = session('api_cookies');
 

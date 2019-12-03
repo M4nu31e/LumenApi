@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ApiAccountService;
+use App\Services\ApiLoginAccountUserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,5 +30,10 @@ class IsacApiServiceProvider extends ServiceProvider
         $this->app->bind(ApiAccountService::class, function ($app) {
             return new ApiAccountService($this->request);
         });
+
+        $this->app->bind(ApiLoginAccountUserService::class, function ($app) {
+                return new ApiLoginAccountUserService($this->request);
+            }
+        );
     }
 }

@@ -26,14 +26,20 @@ class FormRequestServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->afterResolving(ValidatesWhenResolved::class, function ($resolved) {
-            $resolved->validateResolved();
-        });
+        $this->app->afterResolving(
+            ValidatesWhenResolved::class,
+            function ($resolved) {
+                $resolved->validateResolved();
+            }
+        );
 
-        $this->app->resolving(FormRequest::class, function ($request, $app) {
-            $request = FormRequest::createFrom($app['request'], $request);
+        $this->app->resolving(
+            FormRequest::class,
+            function ($request, $app) {
+                $request = FormRequest::createFrom($app['request'], $request);
 
-            $request->setContainer($app)->setRedirector($app->make(Redirector::class));
-        });
+                $request->setContainer($app)->setRedirector($app->make(Redirector::class));
+            }
+        );
     }
 }
