@@ -30,7 +30,6 @@ $router->group(
         $ACCOUNT = 'account';
         //login account
         $router->post($ACCOUNT . '/login', 'ApiLoginAccountController@create');
-
     }
 );
 
@@ -41,8 +40,5 @@ $router->group(
         $ACCOUNT = 'account';
         //create account
         $router->post($ACCOUNT . '/create', 'ApiAccountController@create');
-
     }
 );
-
-

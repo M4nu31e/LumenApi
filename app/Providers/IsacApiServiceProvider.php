@@ -33,7 +33,6 @@ class IsacApiServiceProvider extends ServiceProvider
 
         $this->app->bind(ApiLoginAccountUserService::class, function ($app) {
                 return new ApiLoginAccountUserService($this->request);
-            }
-        );
+        });
     }
 }
