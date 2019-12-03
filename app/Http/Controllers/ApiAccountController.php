@@ -19,18 +19,18 @@ class ApiAccountController extends IsacApiController
      *
      * @OA\Post(
      *     path="/account/create",
-     *     tags={"account"},
+     *     tags={"Account"},
      *     summary="Create new account",
      *     operationId="createAccount",
-     *     @OA\Response(
+     * @OA\Response(
      *         response=405,
      *         description="Invalid input"
      *     ),
      *     requestBody={"$ref": "#/components/requestBodies/Account"}
      * )
      *
-     * @param ApiAccountService $accountService
-     * @param AccountCreateRequest $request
+     * @param  ApiAccountService $accountService
+     * @param  AccountCreateRequest $request
      * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
     public function create(
@@ -39,6 +39,7 @@ class ApiAccountController extends IsacApiController
     ) {
 
         $results = $accountService->create($request);
+
         if ($results) {
             return $this->returnStatus(
                 200,

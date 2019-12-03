@@ -95,10 +95,13 @@ class FormRequest extends Request implements ValidatesWhenResolved
     protected function failedValidation(Validator $validator)
     {
         $apiController = new IsacApiController(new Request());
-        $jsonResponse = $apiController->returnStatus(422, [
+        $jsonResponse = $apiController->returnStatus(
+            422,
+            [
             'msg' => 'Validation Error',
             'data' => $this->formatErrors($validator)
-        ]);
+            ]
+        );
 
         throw new HttpResponseException($jsonResponse);
     }
@@ -125,7 +128,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     protected function failedAuthorization()
     {
-//        throw new HttpResponseException($this->forbiddenResponse());
+        //        throw new HttpResponseException($this->forbiddenResponse());
         throw new UnauthorizedException($this->forbiddenResponse());
     }
 
@@ -133,7 +136,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
      * Get the proper failed validation response for the request.
      *
      * @param  array $errors
-     * @param  int $code
+     * @param  int   $code
      * @return JsonResponse
      */
     public function response(array $errors, $code = 422)

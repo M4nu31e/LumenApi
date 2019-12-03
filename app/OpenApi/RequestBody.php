@@ -12,6 +12,16 @@
  *     request="Account",
  *     description="Account object to create a new isac account",
  *     required=true,
- *     @OA\JsonContent(ref="#/components/schemas/Account")
+ * @OA\JsonContent(ref="#/components/schemas/Account")
+ * )
+ */
+
+/**
+ *
+ * @OA\RequestBody(
+ *     request="Login",
+ *     description="Login object to create a new Login",
+ *     required=true,
+ * @OA\JsonContent(ref="#/components/schemas/Login")
  * )
  */

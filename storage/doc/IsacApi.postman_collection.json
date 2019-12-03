@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "95cca485-d75f-4c72-8602-680be45980ff",
+		"name": "Services: IsacApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sac-api/v2/account/create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"salutation\":\"Herr\",\r\n\"firstname\":\"first Name\",\r\n\"lastname\":\"last_name\",\r\n\"email\":\"Mail@testinger.de\",\r\n\"street\":\"1234Dtreet\",\r\n\"city\":\"Regensburg\",\r\n\"zipcode\":\"09568\",\r\n\"country\":\"germany\",\r\n\"users_id\":\"151s6541f584184\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:20741/isac-api/v2/account/create",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "20741",
+					"path": [
+						"isac-api",
+						"v2",
+						"account",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginAccountUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"username\":\"deniz.cakan@internetx.com\",\r\n\"client_ip\":\"8.8.8.8\",\r\n\"appkey\":\"605c46de-a3aa-49a8-ad0b-25ebc46e629b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:20741/isac-api/v2/account/login",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "20741",
+					"path": [
+						"isac-api",
+						"v2",
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

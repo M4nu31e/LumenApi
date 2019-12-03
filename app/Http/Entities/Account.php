@@ -22,6 +22,24 @@ class Account
 {
 
     /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'salutation' => 'required',
+        'firstname' => 'required',
+        'lastname' => 'required',
+        'email' => 'required',
+        'street' => 'required',
+        'city' => 'required',
+        'zipcode' => 'required',
+        'country' => 'required',
+        'users_id' => 'required'
+    ];
+    /**
+     * The salutation
+     *
      * @OA\Property(
      *     default="salutation",
      *     title="Salutation",
@@ -31,29 +49,16 @@ class Account
      * @var string
      */
     public $salutation;
-
     /**
-     * The salutation name
+     * The firstname
+     *
+     * @OA\Property(
+     *     default="firstname",
+     *     title="Firstname",
+     *     description="Firstname"
+     * )
+     *
      * @var string
-     * @OA\Property()
      */
     public $firstname;
-
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'salutation' => 'required',
-        'firstname' => 'required',
-        /*    'lastname' => 'required',
-            'email' => 'required',
-            'street' => 'required',
-            'city' => 'required',
-            'zipcode' => 'required',
-            'country' => 'required',
-            'users_id' => 'required',*/
-    ];
 }

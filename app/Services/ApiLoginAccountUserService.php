@@ -8,19 +8,19 @@
 
 namespace App\Services;
 
-use App\Http\Requests\AccountCreateRequest;
+use App\Http\Requests\AccountLoginRequest;
 use App\Services\BackendConnectionClient\BackendConnection as backend;
 use Illuminate\Support\Facades\Log;
 use PHPUnit\Runner\Exception;
 
-class ApiAccountService extends IsacApiService
+class ApiLoginAccountUserService extends IsacApiService
 {
-    public function create(AccountCreateRequest $request)
+    public function create(AccountLoginRequest $request)
     {
         try {
-            Log::info("creating account: " . json_encode($request->all()));
+            Log::info("creating login: " . json_encode($request->all()));
             $backendConnection = new backend();
-            return $backendConnection->callBackend('WS_CREATE_GUEST_ACCOUNT', $request->all());
+            return $backendConnection->callBackend('WS_LOGIN_ACCOUNT_USER', $request->all());
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
