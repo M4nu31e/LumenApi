@@ -6,5 +6,5 @@ use IxHelper\Lumen\Http\Controller\MicroserviceController;
 
 class Controller extends MicroserviceController
 {
-    protected $statusPrefix = 'ISACAPI';
+    protected $statusPrefix = 'FPS';
 }
